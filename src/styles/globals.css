@@ -1,0 +1,15 @@
+@import './variables.css';
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=MedievalSharp&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--negro-carbon);
+    color: var(--crema-pergamino);
+    font-family: var(--fuente-texto);
+    overflow-x: hidden;
+}

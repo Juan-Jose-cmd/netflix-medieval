@@ -1,0 +1,11 @@
+:root {
+    --oro-principal: #D4AF37;
+    --oro-secundario: #B8860B;
+    --rojo-profundo: #8B0000;
+    --verde-bosque: #2F4F4F;
+    --gris-piedra: #696969;
+    --crema-pergamino: #F5F5DC;
+    --negro-carbon: #0A0A0A;
+    --fuente-texto: 'Cinzel', serif;
+    --fuente-titulos: 'MedievalSharp', cursive;
+}

@@ -1,0 +1,47 @@
+.row-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.row-content {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 1rem 0;
+  scroll-behavior: smooth; /* ← Scroll suave */
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.row-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Botones de navegación para las filas */
+.row-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: var(--oro-principal);
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.row-nav:hover {
+  background: var(--oro-principal);
+  color: var(--negro-carbon);
+}
+
+.row-nav.left {
+  left: 0;
+}
+
+.row-nav.right {
+  right: 0;
+}
