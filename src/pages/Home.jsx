@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { getPopularMovies } from '../services/api';
+import { getPopularMovies, searchMovies, getTopRatedMovies } from '../services/api';
 import Header from '../components/Header/Header';
 import HeroBanner from '../components/HeroBanner/HeroBanner';
 import MovieRow from '../components/MovieRow/MovieRow';
+import SearchResults from '../components/SearchResults/SearchResults';
 
 function Home() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
-    const loadMovies = async () => {
+    const loadInitialMovies = async () => {
       try {
-        // Cargar películas populares
-        const popularData = await getPopularMovies();
-        setPopularMovies(popularData.results);
+        const [popularData, topRatedData] = await Promise.all([
+          getPopularMovies(),
+          getPopularMovies()
+        ]);
         
-        // Podríamos cargar más categorías aquí después
-        setTopRatedMovies(popularData.results.slice(0, 10)); // Temporal
+        setPopularMovies(popularData.results);
+        setTopRatedMovies(topRatedData.results.slice(0, 15));
+        setNowPlayingMovies(popularData.results.slice(10, 25));
         
         setLoading(false);
       } catch (error) {
@@ -26,20 +34,66 @@ function Home() {
       }
     };
 
-    loadMovies();
+    loadInitialMovies();
   }, []);
+
+
+  const handleSearch = async (query) => {
+    if (!query.trim()) {
+      setSearchResults(null);
+      setSearchQuery('');
+      return;
+    }
+
+    setSearchQuery(query);
+    setIsSearching(true);
+
+    try {
+      const allMovies = [...popularMovies, ...topRatedMovies, ...nowPlayingMovies];
+      const filtered = allMovies.filter(movie =>
+        movie.title.toLowerCase().includes(query.toLowerCase())
+      );
+      
+
+      const uniqueResults = filtered.filter((movie, index, self) =>
+        index === self.findIndex(m => m.id === movie.id)
+      );
+      
+      setSearchResults(uniqueResults);
+    } catch (error) {
+      console.error('Error en búsqueda:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   if (loading) {
     return (
       <div style={{ textAlign: 'center', padding: '2rem', marginTop: '80px' }}>
-        <h2>🛡️ Cargando el reino cinematográfico...</h2>
+        <h2>Cargando el reino cinematográfico...</h2>
       </div>
     );
   }
 
+
+  if (searchResults !== null) {
+    return (
+      <div className="netflix-home">
+        <Header onSearch={handleSearch} />
+        <SearchResults 
+          searchQuery={searchQuery}
+          searchResults={searchResults}
+          isLoading={isSearching}
+        />
+      </div>
+    );
+  }
+
+
   return (
     <div className="netflix-home">
-      <Header />
+      <Header onSearch={handleSearch} />
       <HeroBanner />
       
       <main className="main-content">
@@ -54,8 +108,13 @@ function Home() {
         />
         
         <MovieRow 
-          title="Continuar Viendo" 
-          movies={popularMovies.slice(10, 20)} 
+          title="En Cartelera" 
+          movies={nowPlayingMovies} 
+        />
+        
+        <MovieRow 
+          title="Recomendadas para Ti" 
+          movies={popularMovies.slice(15, 25)} 
         />
       </main>
     </div>

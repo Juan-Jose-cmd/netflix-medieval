@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import './Header.css';
 
-function Header() {
+function Header({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchActive, setIsSearchActive] = useState(false);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      onSearch(searchQuery.trim());
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+
+    if (e.target.value.trim() && onSearch) {
+      onSearch(e.target.value.trim());
+    }
+  };
 
   return (
     <header className="medieval-header">
       <div className="header-content">
         <div className="logo">
-          <h1>🏰 Netflix Medieval</h1>
+          <h1>Netflix Medieval</h1>
         </div>
         
         <nav className="navigation">
@@ -19,15 +35,29 @@ function Header() {
         </nav>
 
         <div className="user-section">
-          <div className="search-box">
-            <input 
-              type="text" 
-              placeholder="Buscar pergaminos..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <span>🔍</span>
+          <div className={`search-container ${isSearchActive ? 'active' : ''}`}>
+            <form onSubmit={handleSearchSubmit} className="search-form">
+              <input
+                type="text"
+                placeholder="Buscar pergaminos cinematográficos..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onFocus={() => setIsSearchActive(true)}
+                onBlur={() => setIsSearchActive(false)}
+                className="search-input"
+              />
+              <button type="submit" className="search-btn">
+                🔍
+              </button>
+            </form>
+            
+            {isSearchActive && searchQuery && (
+              <div className="search-suggestions">
+                <p>Buscar: "{searchQuery}"</p>
+              </div>
+            )}
           </div>
+          
           <button className="user-btn">👤</button>
         </div>
       </div>

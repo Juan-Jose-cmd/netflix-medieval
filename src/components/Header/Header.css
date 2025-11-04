@@ -58,10 +58,93 @@
   font-weight: bold;
 }
 
+
 .user-section {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
+}
+
+.search-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.search-container.active {
+  z-index: 1001;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  padding: 0.3rem;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.search-container.active .search-form {
+  background: rgba(10, 10, 10, 0.95);
+  border-color: var(--oro-principal);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.search-input {
+  background: none;
+  border: none;
+  color: var(--crema-pergamino);
+  padding: 0.5rem 1rem;
+  width: 250px;
+  font-family: var(--fuente-texto);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgba(245, 245, 220, 0.6);
+}
+
+.search-btn {
+  background: var(--oro-principal);
+  border: none;
+  color: var(--negro-carbon);
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+}
+
+.search-btn:hover {
+  background: var(--oro-secundario);
+  transform: scale(1.1);
+}
+
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid var(--oro-principal);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 1rem;
+  margin-top: 0.3rem;
+  backdrop-filter: blur(10px);
+}
+
+.search-suggestions p {
+  color: var(--crema-pergamino);
+  font-family: var(--fuente-texto);
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .user-btn {
@@ -80,27 +163,6 @@
   transform: scale(1.1);
 }
 
-.search-box {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 0.3rem 0.8rem;
-}
-
-.search-box input {
-  background: none;
-  border: none;
-  color: var(--crema-pergamino);
-  padding: 0.3rem;
-  width: 200px;
-  font-family: var(--fuente-texto);
-}
-
-.search-box input:focus {
-  outline: none;
-}
-
 @media (max-width: 768px) {
   .medieval-header {
     padding: 1rem 2rem;
@@ -110,7 +172,26 @@
     display: none;
   }
   
-  .search-box input {
-    width: 150px;
+  .search-input {
+    width: 180px;
+  }
+  
+  .user-section {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo h1 {
+    font-size: 1.4rem;
+  }
+  
+  .search-input {
+    width: 140px;
+    font-size: 0.8rem;
+  }
+  
+  .search-input::placeholder {
+    font-size: 0.8rem;
   }
 }
